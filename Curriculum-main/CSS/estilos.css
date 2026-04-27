@@ -1,0 +1,353 @@
+:root {
+    --bg-light: #e4e6e3;
+    --bg-dark: #090909;
+    --text-dark: #111111;
+    --text-light: #d4d4d4;
+    --gradient-warm: linear-gradient(90deg, #f77a67, #fcad88, #ff8c6b);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Efecto granulado (Noise) que cubre toda la pantalla */
+.noise-texture::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.12"/%3E%3C/svg%3E');
+}
+
+/* =========================================
+   HEADER BLANCO SUPERIOR
+   ========================================= */
+.header-light {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    padding: 2rem 3rem 1rem 3rem;
+    text-transform: uppercase;
+    display: grid;
+    grid-template-areas:
+        "foto titulo"
+        "foto subtitulo"
+        "contacto contacto";
+    grid-template-columns: auto 1fr;
+    column-gap: 2.5rem;
+    position: relative;
+}
+
+.fotoPerfil {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    transform-origin: center;
+    grid-area: foto;
+    align-self: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+
+    transition:
+        transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.4s ease,
+        filter 0.4s ease,
+        border-radius 0.4s ease;
+}
+
+.fotoPerfil:hover {
+    transform: scale(1.04);
+    box-shadow: 0 15px 35px rgba(247, 122, 103, 0.2);
+
+}
+
+.foto-halo {
+    grid-area: foto;
+    /* La clave: lo mandamos a la misma celda que la imagen */
+    align-self: center;
+    /* Lo centramos verticalmente igual que la foto */
+    justify-self: center;
+    /* Lo centramos horizontalmente en su celda */
+
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: var(--gradient-warm);
+
+    /* Quitamos el translate que usábamos antes y dejamos solo la escala */
+    transform: scale(0.9);
+    opacity: 1;
+    filter: blur(10px);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    z-index: 1;
+    /* Se queda detrás de la foto gracias al z-index */
+}
+
+/* Estado de la foto cuando está siendo presionada */
+.fotoPerfil.presionado {
+    transform: scale(0.95);
+    /* Se contrae */
+    border-radius: 40% 60% 55% 45% / 45% 45% 55% 55%;
+    /* Deformación orgánica asimétrica */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1) saturate(1.2);
+    /* Se ilumina */
+}
+
+/* Estado del halo cuando la foto está presionada */
+.fotoPerfil.presionado+.foto-halo {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+    /* Se expande más allá de la foto */
+}
+
+.title-huge {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    margin-bottom: 0.5rem;
+    transform: scaleX(1.1);
+    /* Efecto estirado */
+    transform-origin: left;
+    grid-area: titulo;
+    align-self: end;
+}
+
+.subtitle-bold {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    grid-area: subtitulo;
+    align-self: start;
+}
+
+.contact-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 800;
+    font-size: 1rem;
+    border-top: 4px solid var(--text-dark);
+    padding-top: 0.5rem;
+    grid-area: contacto;
+    margin-top: 1rem;
+}
+
+.contact-bar a,
+.contact-bar span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.contact-bar a:hover {
+    color: #f77a67;
+    transform: translateY(-2px);
+}
+
+.contact-bar svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+/* =========================================
+   CONTENIDO NEGRO INFERIOR
+   ========================================= */
+.main-dark {
+    padding: 2rem 3rem;
+    color: var(--text-light);
+}
+
+/* Círculos con gradiente de malla simulado */
+.liquid-circles {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2b6df5, #ff5e62, #ff9966, #2b6df5);
+    background-size: 300% 300%;
+    animation: gradientMove 6s ease infinite;
+    filter: blur(1px) contrast(1.2);
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.cv-section {
+    margin-bottom: 2.5rem;
+}
+
+/* Títulos como botones desplegables */
+.gradient-heading {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+}
+
+.gradient-heading:hover {
+    opacity: 0.8;
+}
+
+/* Cuerpo del texto */
+.content-body {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-light);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+}
+
+.content-body.show {
+    max-height: 1000px;
+    opacity: 1;
+    margin-top: 1rem;
+}
+
+.content-body p {
+    margin-bottom: 0.8rem;
+}
+
+.content-body ul {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.content-body li {
+    margin-bottom: 0.4rem;
+}
+
+/* =========================================
+   DISEÑO RESPONSIVE (TABLETS Y MÓVILES)
+   ========================================= */
+
+/* Para Tablets y pantallas medianas (hasta 900px) */
+@media (max-width: 900px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        /* Pasa de 2 columnas a 1 */
+    }
+
+    .header-light,
+    .main-dark {
+        padding: 1.5rem;
+    }
+
+    .header-light {
+        grid-template-areas:
+            "foto"
+            "titulo"
+            "subtitulo"
+            "contacto";
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .title-huge {
+        transform-origin: center;
+        transform: none;
+        /* Quitamos el estiramiento horizontal en pantallas menores para evitar desbordes */
+    }
+
+    .contact-bar {
+        justify-content: center;
+    }
+}
+
+/* Para Teléfonos Celulares (hasta 600px) */
+@media (max-width: 600px) {
+
+    /* Achicamos la foto Y el halo al mismo tiempo para que el efecto no se rompa */
+    .fotoPerfil,
+    .foto-halo {
+        width: 150px;
+        height: 150px;
+    }
+
+    /* Ajustamos los márgenes de los textos para que respiren mejor */
+    .title-huge {
+        font-size: clamp(2rem, 10vw, 3rem);
+        /* Letra un poco más adaptable */
+        line-height: 1.1;
+        margin-top: 1rem;
+    }
+
+    .subtitle-bold {
+        font-size: 1.1rem;
+    }
+
+    /* Convertimos la barra de contacto en una lista vertical para que sea fácil hacer tap con el dedo */
+    .contact-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+        /* Más espacio entre links */
+        border-top: 2px solid var(--text-dark);
+        /* Línea un poco más fina */
+        padding-top: 1.5rem;
+        width: 100%;
+    }
+
+    .contact-bar a,
+    .contact-bar span {
+        font-size: 1.1rem;
+        /* Letra un poco más grande para leer mejor en móvil */
+    }
+
+}
