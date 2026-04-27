@@ -1,48 +1,79 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // --- LÓGICA EXISTENTE PARA BOTONES DESPLEGABLES ---
+    const toggleButtons = document.querySelectorAll('.btn-toggle');
 
-    //_______________Boton presentacion____________________________
-    function desplegar_presentacion(){
-        texto_presentacion.classList.toggle('show');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetContent = document.getElementById(targetId);
+            targetContent.classList.toggle('show');
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', !isExpanded);
+        });
+    });
+
+    // --- NUEVA LÓGICA PARA LA ANIMACIÓN DE LA FOTO DE PERFIL ---
+    const foto = document.querySelector('.fotoPerfil');
+
+    if (foto) {
+        // 1. Crear el elemento para el halo de gradiente dinámicamente
+        const halo = document.createElement('div');
+        halo.classList.add('foto-halo');
+        // Insertar el halo justo después de la foto en el DOM
+        foto.parentNode.insertBefore(halo, foto.nextSibling);
+
+        // 2. Definir funciones para manejar los estados
+        const activarEfecto = () => {
+            foto.classList.add('presionado');
+        };
+
+        const desactivarEfecto = () => {
+            foto.classList.remove('presionado');
+        };
+
+        // 3. Función para descargar el PDF
+        const descargarPDF = () => {
+            const link = document.createElement('a');
+
+            // Ruta actualizada apuntando a la carpeta "documentos"
+            link.href = 'documentos/CV_Andres_Emmanuel_Baez.pdf';
+            link.download = 'CV_Andres_Emmanuel_Baez.pdf';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // 4. Escuchar eventos de ratón (Computadoras)
+        foto.addEventListener('mousedown', activarEfecto);
+
+        // Cuando suelta el clic, desactivamos la animación y DESCARGAMOS
+        foto.addEventListener('mouseup', () => {
+            if (foto.classList.contains('presionado')) {
+                desactivarEfecto();
+                descargarPDF();
+            }
+        });
+
+        // Si el usuario hace clic pero arrastra el mouse fuera de la foto, cancelamos
+        foto.addEventListener('mouseleave', desactivarEfecto);
+
+        // 5. Escuchar eventos táctiles (Móviles)
+        foto.addEventListener('touchstart', (e) => {
+            // e.preventDefault(); // Opcional: previene comportamientos por defecto como zoom
+            activarEfecto();
+        }, { passive: true });
+
+        // Cuando suelta el dedo de la pantalla, desactivamos y DESCARGAMOS
+        foto.addEventListener('touchend', () => {
+            if (foto.classList.contains('presionado')) {
+                desactivarEfecto();
+                descargarPDF();
+            }
+        });
+
+        foto.addEventListener('touchcancel', desactivarEfecto); // Si la acción táctil se interrumpe
     }
+});
 
-    let btn_presentacion = document.getElementById('btn_presentacion');
-    let texto_presentacion = document.getElementById('texto_presentacion');
-    btn_presentacion.addEventListener('click', desplegar_presentacion);
 
-    //_______________Boton experiencia____________________________
-    function desplegar_experiencia(){
-        texto_experiencia.classList.toggle('show');
-    }
-
-    let btn_experiencia = document.getElementById('btn_experiencia');
-    let texto_experiencia = document.getElementById('texto_experiencia');
-    btn_experiencia.addEventListener('click', desplegar_experiencia);
-
-    //________________Boton estudios______________________________
-    function desplegar_estudios(){
-        texto_estudios.classList.toggle('show');
-    }
-
-    let btn_estudios = document.getElementById('btn_estudios');
-    let texto_estudios = document.getElementById('texto_estudios');
-    btn_estudios.addEventListener('click', desplegar_estudios);
-
-    //__________________Boton conocimientos_________________________
-    function desplegar_conocimientos(){
-        texto_conocimientos.classList.toggle('show');
-    }
-
-    let btn_conocimientos = document.getElementById('btn_conocimientos');
-    let texto_conocimientos = document.getElementById('texto_conocimientos');
-    btn_conocimientos.addEventListener('click', desplegar_conocimientos);
-
-    //___________________boton idiomas_____________________________
-    function desplegar_idiomas(){
-        texto_idiomas.classList.toggle('show');
-    }
-    
-    let btn_idiomas = document.getElementById('btn_idiomas');
-    let texto_idiomas = document.getElementById('texto_idiomas');
-    btn_idiomas.addEventListener('click', desplegar_idiomas);
-    
-
-    
